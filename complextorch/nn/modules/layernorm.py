@@ -72,6 +72,9 @@ class CVLayerNorm(nn.Module):
             self.normalized_shape == input.shape[-len(self.normalized_shape) :]
         ), "Expected normalized_shape to match last dimensions of input shape!"
 
+        self.weight.data = self.weight.data.to(input.device)
+        self.bias.data = self.bias.data.to(input.device)
+
         return cvF.cv_layer_norm(
             input, self.normalized_shape, self.weight, self.bias, self.eps
         )
