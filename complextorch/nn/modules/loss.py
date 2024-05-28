@@ -171,11 +171,12 @@ class SSIM(nn.Module):
         data_range = data_range[:, None, None, None]
         C1 = (self.k1 * data_range) ** 2
         C2 = (self.k2 * data_range) ** 2
-        ux = F.conv2d(x, self.w)  # typing: ignore
-        uy = F.conv2d(y, self.w)  #
-        uxx = F.conv2d(x * x, self.w)
-        uyy = F.conv2d(y * y, self.w)
-        uxy = F.conv2d(x * y, self.w)
+        device = x.device
+        ux = F.conv2d(x, self.w.to(device))  # typing: ignore
+        uy = F.conv2d(y, self.w.to(device))  #
+        uxx = F.conv2d(x * x, self.w.to(device))
+        uyy = F.conv2d(y * y, self.w.to(device))
+        uxy = F.conv2d(x * y, self.w.to(device))
         vx = self.cov_norm * (uxx - ux * ux)
         vy = self.cov_norm * (uyy - uy * uy)
         vxy = self.cov_norm * (uxy - ux * uy)
