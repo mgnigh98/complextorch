@@ -1,6 +1,7 @@
 from typing import Optional
 
 import torch.nn as nn
+import torch
 
 from ... import CVTensor
 
@@ -85,7 +86,7 @@ class MagMinMaxNorm(nn.Module):
 
         self.dim = dim
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Applies the *min-max norm* to the input tensor yielding an output whose magnitude is normalized between 0 and 1 over the specified dimension while phase information remains unchanged.
 
         Args:
@@ -95,7 +96,7 @@ class MagMinMaxNorm(nn.Module):
             CVTensor: :math:`\frac{\mathbf{z} - \mathbf{z}_{min}}{\mathbf{z}_{max} - \mathbf{z}_{min}}`
         """
         x_mag = input.abs()
-        x_min = x_mag.min(self.dim, keepdim=True)[0]
-        x_max = x_mag.max(self.dim, keepdim=True)[0]
+        x_min = x_mag.min()
+        x_max = x_mag.max()
         out = (input - x_min) / (x_max - x_min)
-        return CVTensor(out.real, out.imag)
+        return torch.complex(out.real, out.imag)
