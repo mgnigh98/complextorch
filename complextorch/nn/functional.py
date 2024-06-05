@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from typing import List, Optional
 
-from .. import CVTensor, from_polar
+from .. import from_polar
 
 __all__ = [
     "apply_complex",
@@ -16,8 +16,8 @@ __all__ = [
 
 
 def apply_complex(
-    real_module: nn.Module, imag_module: nn.Module, x: CVTensor
-) -> CVTensor:
+    real_module: nn.Module, imag_module: nn.Module, x: torch.complex
+) -> torch.complex:
     r"""
     Apply Complex
     -------------
@@ -33,13 +33,13 @@ def apply_complex(
 
         G(\mathbf{z}) = G_\mathbb{R}(\mathbf{x}) - G_\mathbb{I}(\mathbf{y}) + j(G_\mathbb{R}(\mathbf{y}) + G_\mathbb{I}(\mathbf{x}))
     """
-    return CVTensor(
+    return torch.complex(
         real_module(x.real) - imag_module(x.imag),
         real_module(x.imag) + imag_module(x.real),
     )
 
 
-def apply_complex_split(r_fun, i_fun, x: CVTensor) -> CVTensor:
+def apply_complex_split(r_fun, i_fun, x: torch.complex) -> torch.complex:
     r"""
     Apply Complex Split
     -------------------
@@ -60,10 +60,10 @@ def apply_complex_split(r_fun, i_fun, x: CVTensor) -> CVTensor:
     Returns:
         CVTensor: :math:`G_\mathbb{R}(\mathbf{x}) + j G_\mathbb{I}(\mathbf{y})`
     """
-    return CVTensor(r_fun(x.real), i_fun(x.imag))
+    return torch.complex(r_fun(x.real), i_fun(x.imag))
 
 
-def apply_complex_polar(mag_fun, phase_fun, x: CVTensor) -> CVTensor:
+def apply_complex_polar(mag_fun, phase_fun, x: torch.complex) -> torch.complex:
     r"""
     Apply Complex Polar
     -------------------
@@ -282,7 +282,7 @@ def _whiten2x2_batch_norm(
 
 
 def cv_batch_norm(
-    x: CVTensor,
+    x: torch.complex,
     running_mean: Optional[torch.Tensor] = None,
     running_var: Optional[torch.Tensor] = None,
     weight: Optional[torch.Tensor] = None,
@@ -290,7 +290,7 @@ def cv_batch_norm(
     training: bool = True,
     momentum: float = 0.1,
     eps: float = 1e-5,
-) -> CVTensor:
+) -> torch.complex:
     r"""
     Complex-Valued Batch Normalization
     ----------------------------------
@@ -369,7 +369,7 @@ def cv_batch_norm(
             dim=0,
         ) + bias.view(2, *shape)
 
-    return CVTensor(z[0], z[1])
+    return torch.complex(z[0], z[1])
 
 
 def _whiten2x2_layer_norm(
@@ -423,12 +423,12 @@ def _whiten2x2_layer_norm(
 
 
 def cv_layer_norm(
-    x: CVTensor,
+    x: torch.complex,
     normalized_shape: List[int],
     weight: Optional[torch.Tensor] = None,
     bias: Optional[torch.Tensor] = None,
     eps: float = 1e-5,
-) -> CVTensor:
+) -> torch.complex:
     r"""
     Complex-Valued Layer Normalization
     ----------------------------------
@@ -479,4 +479,4 @@ def cv_layer_norm(
             dim=0,
         ) + bias.view(2, *shape)
 
-    return CVTensor(z[0], z[1])
+    return torch.complex(z[0], z[1])

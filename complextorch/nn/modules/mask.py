@@ -3,7 +3,7 @@ from typing import Optional
 import torch.nn as nn
 import torch
 
-from ... import CVTensor
+#from ... import CVTensor
 
 __all__ = ["ComplexRatioMask", "PhaseSigmoid", "MagMinMaxNorm"]
 
@@ -31,7 +31,7 @@ class ComplexRatioMask(nn.Module):
     def __init__(self) -> None:
         super(ComplexRatioMask, self).__init__()
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes complex ratio mask on complex-valued input tensor.
 
         Args:

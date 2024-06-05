@@ -5,7 +5,7 @@ from torch.nn.common_types import _size_1_t, _size_2_t, _size_3_t
 
 from typing import Tuple, Union
 
-from ... import CVTensor
+
 
 __all__ = [
     "SlowCVConv1d",
@@ -25,7 +25,7 @@ class SlowCVConv1d(nn.Module):
 
         - Implemented using `torch.nn.Conv1d <https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html>`_ and complex-valued tensors.
 
-        - Slower than using CVTensor. PyTorch must have some additional overhead that makes this method significantly slower than using CVTensors and the other CVConv layers
+        - Slower than using CVTensor. PyTorch must have some additional overhead that makes this method significantly slower than using torch.complexs and the other CVConv layers
     """
 
     def __init__(
@@ -53,22 +53,22 @@ class SlowCVConv1d(nn.Module):
             dtype=torch.complex64,
         )
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes 1-D complex-valued convolution using PyTorch.
 
         Args:
-            input (CVTensor): input tensor
+            input (torch.complex): input tensor
 
         Returns:
-            CVTensor: Conv1d(input)
+            torch.complex: Conv1d(input)
         """
         input = self.conv(input.complex)
-        return CVTensor(input.real, input.imag)
+        return torch.complex(input.real, input.imag)
 
 
 class _CVConv(nn.Module):
     r"""
-    CVTensor-based Complex-Valued Convolution
+    torch.complex-based Complex-Valued Convolution
     -----------------------------------------
     """
 
@@ -149,14 +149,14 @@ class _CVConv(nn.Module):
             self.conv_i.bias.data = __temp.bias.imag
 
     @property
-    def weight(self) -> CVTensor:
-        return CVTensor(self.conv_r.weight, self.conv_i.weight)
+    def weight(self) -> torch.complex:
+        return torch.complex(self.conv_r.weight, self.conv_i.weight)
 
     @property
-    def bias(self) -> CVTensor:
-        return CVTensor(self.conv_r.bias, self.conv_i.bias)
+    def bias(self) -> torch.complex:
+        return torch.complex(self.conv_r.bias, self.conv_i.bias)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""
         Computes convolution 25% faster than naive method by using Gauss' multiplication trick
         """
@@ -173,7 +173,7 @@ class _CVConv(nn.Module):
             padding=self.padding,
             groups=self.groups,
         )
-        return CVTensor(t1 - t2, t3 - t2 - t1)
+        return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
 class CVConv1d(_CVConv):
@@ -367,7 +367,7 @@ class CVConv3d(_CVConv):
 
 class _CVConvTranspose(nn.Module):
     r"""
-    CVTensor-based Complex-Valued Transposed Convolution
+    torch.complex-based Complex-Valued Transposed Convolution
     ----------------------------------------------------
     """
 
@@ -453,14 +453,14 @@ class _CVConvTranspose(nn.Module):
             self.convt_i.bias.data = __temp.bias.imag
 
     @property
-    def weight(self) -> CVTensor:
-        return CVTensor(self.convt_r.weight, self.convt_i.weight)
+    def weight(self) -> torch.complex:
+        return torch.complex(self.convt_r.weight, self.convt_i.weight)
 
     @property
-    def bias(self) -> CVTensor:
-        return CVTensor(self.convt_r.bias, self.convt_i.bias)
+    def bias(self) -> torch.complex:
+        return torch.complex(self.convt_r.bias, self.convt_i.bias)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""
         Computes convolution 25% faster than naive method by using Gauss' multiplication trick
         """
@@ -479,7 +479,7 @@ class _CVConvTranspose(nn.Module):
             padding=self.padding,
             groups=self.groups,
         )
-        return CVTensor(t1 - t2, t3 - t2 - t1)
+        return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
 class CVConvTranpose1d(_CVConvTranspose):

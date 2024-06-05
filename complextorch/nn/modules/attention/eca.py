@@ -1,7 +1,8 @@
 import numpy as np
 import torch.nn as nn
+import torch
 
-from .... import CVTensor
+#from .... import CVTensor
 from .... import nn as cvnn
 
 __all__ = [
@@ -52,7 +53,7 @@ class _CVEfficientChannelAttention(nn.Module):
         out = k if k % 2 else k + 1
         return out
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         batch_size, channels, *im_size = input.shape
         one_vec = [1] * len(im_size)
 

@@ -1,8 +1,9 @@
 from typing import Union, Tuple
 
 import torch.nn as nn
+import torch
 
-from ... import CVTensor
+#from ... import CVTensor
 from .. import functional as cvF
 
 __all__ = ["CVAdaptiveAvgPool1d", "CVAdaptiveAvgPool2d", "CVAdaptiveAvgPool3d"]
@@ -26,7 +27,7 @@ class CVAdaptiveAvgPool1d(nn.AdaptiveAvgPool1d):
     def __init__(self, output_size: Union[int, Tuple[int]]) -> None:
         super().__init__(output_size)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Applies adaptive average pooling using `torch.nn.AdaptiveAvgPool1d <https://pytorch.org/docs/stable/generated/torch.nn.AdaptiveAvgPool1d.html>`_ to the real and imaginary parts of the input tensor separately.
 
         Args:
@@ -56,7 +57,7 @@ class CVAdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
     def __init__(self, output_size) -> None:
         super().__init__(output_size)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Applies adaptive average pooling using `torch.nn.AdaptiveAvgPool2d <https://pytorch.org/docs/stable/generated/torch.nn.AdaptiveAvgPool2d.html>`_ to the real and imaginary parts of the input tensor separately.
 
         Args:
@@ -86,7 +87,7 @@ class CVAdaptiveAvgPool3d(nn.AdaptiveAvgPool3d):
     def __init__(self, output_size) -> None:
         super().__init__(output_size)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Applies adaptive average pooling using `torch.nn.AdaptiveAvgPool3d <https://pytorch.org/docs/stable/generated/torch.nn.AdaptiveAvgPool3d.html>`_ to the real and imaginary parts of the input tensor separately.
 
         Args:
