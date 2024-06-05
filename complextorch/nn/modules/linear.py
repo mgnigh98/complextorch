@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ... import CVTensor
+#from ... import CVTensor
 
 __all__ = ["CVLinear"]
 
@@ -57,17 +57,17 @@ class CVLinear(nn.Module):
             self.linear_i.bias.data = __temp.bias.imag
 
     @property
-    def weight(self) -> CVTensor:
-        return CVTensor(self.linear_r.weight, self.linear_i.weight)
+    def weight(self) -> torch.complex:
+        return torch.complex(self.linear_r.weight, self.linear_i.weight)
 
     @property
-    def bias(self) -> CVTensor:
+    def bias(self) -> torch.complex:
         if self.linear_r.bias is None:
             return None
         else:
-            return CVTensor(self.linear_r.bias, self.linear_i.bias)
+            return torch.complex(self.linear_r.bias, self.linear_i.bias)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""
         Computes multiplication 25% faster than naive method by using Gauss' multiplication trick
         """
@@ -83,4 +83,4 @@ class CVLinear(nn.Module):
             weight=(self.linear_r.weight + self.linear_i.weight),
             bias=bias,
         )
-        return CVTensor(t1 - t2, t3 - t2 - t1)
+        return torch.complex(t1 - t2, t3 - t2 - t1)

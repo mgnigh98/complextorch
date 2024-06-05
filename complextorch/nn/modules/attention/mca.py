@@ -1,6 +1,7 @@
+import torch
 import torch.nn as nn
 
-from .... import CVTensor
+#from .... import CVTensor
 from .... import nn as cvnn
 
 __all__ = [
@@ -48,7 +49,7 @@ class _CVMaskedChannelAttention(nn.Module):
         self.conv_down = None
         self.conv_up = None
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         # Get attention values
         attn = self.conv_up(self.act(self.conv_down(self.avg_pool(input))))
 

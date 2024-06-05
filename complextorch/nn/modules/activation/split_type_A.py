@@ -1,6 +1,7 @@
+import torch
 import torch.nn as nn
 
-from .... import CVTensor
+#from .... import CVTensor
 from ... import functional as cvF
 
 __all__ = [
@@ -42,7 +43,7 @@ class GeneralizedSplitActivation(nn.Module):
         self.activation_r = activation_r
         self.activation_i = activation_i
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes the generalized *Type-A* split activation function.
 
         Args:
@@ -152,7 +153,7 @@ class CVSplitAbs(nn.Module):
     def __init__(self) -> None:
         super(CVSplitAbs, self).__init__()
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes the Type-A split abs() activation function.
 
         Args:
@@ -161,4 +162,4 @@ class CVSplitAbs(nn.Module):
         Returns:
             CVTensor: :math:`|\mathbf{x}| + j |\mathbf{y}|`
         """
-        return CVTensor(input.real.abs(), input.imag.abs())
+        return torch.complex(input.real.abs(), input.imag.abs())

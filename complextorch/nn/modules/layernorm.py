@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.nn import init
 
 from .. import functional as cvF
-from ... import CVTensor
+#from ... import CVTensor
 
 __all__ = ["CVLayerNorm"]
 
@@ -66,7 +66,7 @@ class CVLayerNorm(nn.Module):
         )
         init.zeros_(self.bias)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         # Sanity check to make sure the shapes match
         assert (
             self.normalized_shape == input.shape[-len(self.normalized_shape) :]

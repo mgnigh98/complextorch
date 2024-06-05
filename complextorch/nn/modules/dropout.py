@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from ... import CVTensor
+#from ... import CVTensor
 from .. import functional as cvF
 
 __all__ = ["CVDropout"]
@@ -28,7 +28,7 @@ class CVDropout(nn.Module):
         self.dropout_r = nn.Dropout(p, inplace)
         self.dropout_i = nn.Dropout(p, inplace)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Performs complex-valued dropout on the input tensor
 
         Args:

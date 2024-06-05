@@ -1,8 +1,9 @@
 from typing import Optional
 
+import torch
 import torch.nn as nn
 
-from ... import CVTensor
+#from ... import CVTensor
 from .. import functional as cvF
 
 __all__ = ["CVSoftMax", "MagSoftMax", "PhaseSoftMax"]
@@ -32,7 +33,7 @@ class CVSoftMax(nn.Module):
 
         self.softmax = nn.Softmax(dim)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes softmax over the real and imaginary parts of the input tensor separately
 
         Args:
@@ -63,7 +64,7 @@ class PhaseSoftMax(nn.Module):
 
         self.softmax = nn.Softmax(dim)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Retains phase and applies `SoftMax <https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html>`_ function to magnitude.
 
         Args:
@@ -95,7 +96,7 @@ class MagSoftMax(nn.Module):
 
         self.softmax = nn.Softmax(dim)
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Ignores phase and applies `SoftMax <https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html>`_ function to magnitude.
 
         Args:

@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 
 from .. import functional as cvF
-from ... import CVTensor
+#from ... import CVTensor
 
 __all__ = ["CVBatchNorm1d", "CVBatchNorm2d", "CVBatchNorm3d"]
 
@@ -73,7 +73,7 @@ class _CVBatchNorm(nn.Module):
     def _check_input_dim(self, input) -> None:
         raise NotImplementedError
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         self._check_input_dim(input)
 
         if self.momentum is None:
@@ -126,7 +126,7 @@ class CVBatchNorm1d(_CVBatchNorm):
             - https://arxiv.org/abs/2302.08286
     """
 
-    def _check_input_dim(self, input: CVTensor) -> None:
+    def _check_input_dim(self, input: torch.complex) -> None:
         if input.dim() != 2 and input.dim() != 3:
             raise ValueError(f"expected 2D or 3D input (got {input.dim()}D input)")
 
@@ -150,7 +150,7 @@ class CVBatchNorm2d(_CVBatchNorm):
             - https://arxiv.org/abs/2302.08286
     """
 
-    def _check_input_dim(self, input: CVTensor) -> None:
+    def _check_input_dim(self, input: torch.complex) -> None:
         if input.dim() != 4:
             raise ValueError(f"expected 4D input (got {input.dim()}D input)")
 
@@ -174,6 +174,6 @@ class CVBatchNorm3d(_CVBatchNorm):
             - https://arxiv.org/abs/2302.08286
     """
 
-    def _check_input_dim(self, input: CVTensor) -> None:
+    def _check_input_dim(self, input: torch.complex) -> None:
         if input.dim() != 5:
             raise ValueError(f"expected 5D input (got {input.dim()}D input)")

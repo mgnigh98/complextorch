@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ... import CVTensor
+#from ... import CVTensor
 
 __all__ = [
     "GeneralizedSplitLoss",
@@ -38,7 +38,7 @@ class GeneralizedSplitLoss(nn.Module):
         self.loss_r = loss_r
         self.loss_i = loss_i
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the real/imag split loss function.
 
         Args:
@@ -79,7 +79,7 @@ class GeneralizedPolarLoss(nn.Module):
         self.weight_mag = weight_mag
         self.weight_phase = weight_phase
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the generalized split polar loss, which computes the loss independently on the magnitude and phase of the estimated and ground truth labels.
 
         Args:
@@ -208,8 +208,8 @@ class SplitSSIM(GeneralizedSplitLoss):
 
     def forward(
         self,
-        x: CVTensor,
-        y: CVTensor,
+        x: torch.complex,
+        y: torch.complex,
         data_range: Optional[torch.Tensor] = None,
         full: bool = False,
     ) -> torch.Tensor:
@@ -242,7 +242,7 @@ class PerpLossSSIM(nn.Module):
         self.ssim = SSIM()
         self.param = nn.Parameter(torch.ones(1) / 2)
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes perpendicular SSIM loss function.
 
         Args:
@@ -295,7 +295,7 @@ class CVQuadError(nn.Module):
     def __init__(self) -> None:
         super(CVQuadError, self).__init__()
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the complex-valued quadratic error function.
 
         Args:
@@ -329,7 +329,7 @@ class CVFourthPowError(nn.Module):
     def __init__(self) -> None:
         super(CVFourthPowError, self).__init__()
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the complex-valued fourth power error function.
 
         Args:
@@ -366,7 +366,7 @@ class CVCauchyError(nn.Module):
 
         self.c2 = c**2
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the complex-valued Cauchy error function.
 
         Args:
@@ -399,7 +399,7 @@ class CVLogCoshError(nn.Module):
     def __init__(self) -> None:
         super(CVLogCoshError, self).__init__()
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the complex-valued log-cosh error function.
 
         Args:
@@ -432,7 +432,7 @@ class CVLogError(nn.Module):
     def __init__(self) -> None:
         super(CVLogError, self).__init__()
 
-    def forward(self, x: CVTensor, y: CVTensor) -> torch.Tensor:
+    def forward(self, x: torch.complex, y: torch.complex) -> torch.Tensor:
         r"""Computes the complex-valued log error function.
 
         Args:

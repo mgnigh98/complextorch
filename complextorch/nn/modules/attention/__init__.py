@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from .... import CVTensor
+#from .... import CVTensor
 from .... import nn as cvnn
 
 __all__ = ["CVScaledDotProductAttention", "CVMultiheadAttention"]
@@ -41,7 +41,7 @@ class CVScaledDotProductAttention(nn.Module):
         self.dropout = cvnn.CVDropout(attn_dropout)
         self.softmax = SoftMaxClass(dim=-1)
 
-    def forward(self, q: CVTensor, k: CVTensor, v: CVTensor) -> CVTensor:
+    def forward(self, q: torch.complex, k: torch.complex, v: torch.complex) -> torch.complex:
         r"""Implements the complex-valued scaled dot-product attention operation.
 
         Args:
@@ -56,7 +56,7 @@ class CVScaledDotProductAttention(nn.Module):
 
         attn = self.dropout(self.softmax(attn))
         output = torch.matmul(attn.complex, v.complex)
-        return CVTensor(output.real, output.imag)
+        return torch.complex(output.real, output.imag)
 
 
 class CVMultiheadAttention(nn.Module):
@@ -96,7 +96,7 @@ class CVMultiheadAttention(nn.Module):
         self.dropout = cvnn.CVDropout(dropout)
         self.layer_norm = cvnn.CVLayerNorm(d_model, eps=1e-6)
 
-    def forward(self, q: CVTensor, k: CVTensor, v: CVTensor) -> CVTensor:
+    def forward(self, q: torch.complex, k: torch.complex, v: torch.complex) -> torch.complex:
         d_k, d_v, n_heads = self.d_k, self.d_v, self.n_heads
         batch_size, len_q, len_k, len_v = q.shape[0], q.shape[1], k.shape[1], v.shape[1]
 

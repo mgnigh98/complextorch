@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 from torch.nn.common_types import _size_1_t, _size_2_t
 
-from ... import CVTensor, from_polar
+#from ... import CVTensor
+from ... import from_polar
 
 __all__ = ["wFMConv1d", "wFMConv2d"]
 
@@ -246,7 +247,7 @@ class wFMConv2d(nn.Module):
             )
         )
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes the 2-D weighted Frechet mean (wFM) convolution.
 
         Args:
@@ -385,7 +386,7 @@ class wFMConv1d(nn.Module):
 
         self.wFM_conv = self.conv1d.wFM_conv
 
-    def forward(self, input: CVTensor) -> CVTensor:
+    def forward(self, input: torch.complex) -> torch.complex:
         r"""Computes the 1-D weighted Frechet mean (wFM) convolution. See :class:`wFMConv2d` for more implementation details as :class:`wFMConv1d` is a wrapper around :class:`wFMConv2d`.
 
         Args:
