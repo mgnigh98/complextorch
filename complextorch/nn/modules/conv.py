@@ -111,7 +111,7 @@ class _CVConv(nn.Module):
             bias=bias,
             padding_mode=padding_mode,
             device=device,
-            dtype=torch.complex64,
+            dtype=dtype if dtype else torch.complex64,
         )
 
         self.conv_r = ConvClass(
@@ -413,7 +413,7 @@ class _CVConvTranspose(nn.Module):
             dilation=dilation,
             padding_mode=padding_mode,
             device=device,
-            dtype=torch.complex64,
+            dtype= dtype if dtype else torch.complex64,
         )
 
         self.convt_r = ConvClass(
