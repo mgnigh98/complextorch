@@ -4,10 +4,10 @@ import torch.nn.functional as F
 
 #from ... import CVTensor
 
-__all__ = ["CVLinear"]
+__all__ = ["Linear"]
 
 
-class CVLinear(nn.Module):
+class Linear(nn.Module):
     r"""
     Complex-Valued Linear Layer
     ---------------------------
@@ -23,7 +23,7 @@ class CVLinear(nn.Module):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVLinear, self).__init__()
+        super(Linear, self).__init__()
 
         # Assumes PyTorch complex weight initialization is correct
         __temp = nn.Linear(

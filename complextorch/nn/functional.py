@@ -10,8 +10,8 @@ __all__ = [
     "apply_complex_split",
     "apply_complex_polar",
     "inv_sqrtm2x2",
-    "cv_batch_norm",
-    "cv_layer_norm",
+    "batch_norm",
+    "layer_norm",
 ]
 
 
@@ -281,7 +281,7 @@ def _whiten2x2_batch_norm(
     )
 
 
-def cv_batch_norm(
+def batch_norm(
     x: torch.complex,
     running_mean: Optional[torch.Tensor] = None,
     running_var: Optional[torch.Tensor] = None,
@@ -422,7 +422,7 @@ def _whiten2x2_layer_norm(
     )
 
 
-def cv_layer_norm(
+def layer_norm(
     x: torch.complex,
     normalized_shape: List[int],
     weight: Optional[torch.Tensor] = None,

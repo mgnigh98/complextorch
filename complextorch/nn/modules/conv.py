@@ -8,24 +8,24 @@ from typing import Tuple, Union
 
 
 __all__ = [
-    "SlowCVConv1d",
-    "CVConv1d",
-    "CVConv2d",
-    "CVConv3d",
-    "CVConvTranpose1d",
-    "CVConvTranpose2d",
-    "CVConvTranpose3d",
+    "SlowConv1d",
+    "Conv1d",
+    "Conv2d",
+    "Conv3d",
+    "ConvTranpose1d",
+    "ConvTranpose2d",
+    "ConvTranpose3d",
 ]
 
 
-class SlowCVConv1d(nn.Module):
+class SlowConv1d(nn.Module):
     r"""
     Slow Complex-Valued 1-D Convolution
     -----------------------------------
 
         - Implemented using `torch.nn.Conv1d <https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html>`_ and complex-valued tensors.
 
-        - Slower than using CVTensor. PyTorch must have some additional overhead that makes this method significantly slower than using torch.complexs and the other CVConv layers
+        - Slower than using CVTensor. PyTorch must have some additional overhead that makes this method significantly slower than using torch.complexs and the other Conv layers
     """
 
     def __init__(
@@ -39,7 +39,7 @@ class SlowCVConv1d(nn.Module):
         groups: int = 1,
         bias: bool = False,
     ) -> None:
-        super(SlowCVConv1d, self).__init__()
+        super(SlowConv1d, self).__init__()
 
         self.conv = nn.Conv1d(
             in_channels,
@@ -66,7 +66,7 @@ class SlowCVConv1d(nn.Module):
         return torch.complex(input.real, input.imag)
 
 
-class _CVConv(nn.Module):
+class _Conv(nn.Module):
     r"""
     torch.complex-based Complex-Valued Convolution
     -----------------------------------------
@@ -88,7 +88,7 @@ class _CVConv(nn.Module):
         device=None,
         dtype=None,
     ) -> None:
-        super(_CVConv, self).__init__()
+        super(_Conv, self).__init__()
 
         self.ConvFunc = ConvFunc
         self.in_channels = in_channels
@@ -176,7 +176,7 @@ class _CVConv(nn.Module):
         return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
-class CVConv1d(_CVConv):
+class Conv1d(_Conv):
     r"""
     1-D Complex-Valued Convolution
     ------------------------------
@@ -222,7 +222,7 @@ class CVConv1d(_CVConv):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConv1d, self).__init__(
+        super(Conv1d, self).__init__(
             ConvClass=nn.Conv1d,
             ConvFunc=F.conv1d,
             in_channels=in_channels,
@@ -239,7 +239,7 @@ class CVConv1d(_CVConv):
         )
 
 
-class CVConv2d(_CVConv):
+class Conv2d(_Conv):
     r"""
     2-D Complex-Valued Convolution
     ------------------------------
@@ -285,7 +285,7 @@ class CVConv2d(_CVConv):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConv2d, self).__init__(
+        super(Conv2d, self).__init__(
             ConvClass=nn.Conv2d,
             ConvFunc=F.conv2d,
             in_channels=in_channels,
@@ -302,7 +302,7 @@ class CVConv2d(_CVConv):
         )
 
 
-class CVConv3d(_CVConv):
+class Conv3d(_Conv):
     r"""
     3-D Complex-Valued Convolution
     ------------------------------
@@ -348,7 +348,7 @@ class CVConv3d(_CVConv):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConv3d, self).__init__(
+        super(Conv3d, self).__init__(
             ConvClass=nn.Conv3d,
             ConvFunc=F.conv3d,
             in_channels=in_channels,
@@ -365,7 +365,7 @@ class CVConv3d(_CVConv):
         )
 
 
-class _CVConvTranspose(nn.Module):
+class _ConvTranspose(nn.Module):
     r"""
     torch.complex-based Complex-Valued Transposed Convolution
     ----------------------------------------------------
@@ -388,7 +388,7 @@ class _CVConvTranspose(nn.Module):
         device=None,
         dtype=None,
     ) -> None:
-        super(_CVConvTranspose, self).__init__()
+        super(_ConvTranspose, self).__init__()
 
         self.ConvFunc = ConvFunc
         self.in_channels = in_channels
@@ -482,7 +482,7 @@ class _CVConvTranspose(nn.Module):
         return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
-class CVConvTranpose1d(_CVConvTranspose):
+class ConvTranpose1d(_ConvTranspose):
     r"""
     1-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -530,7 +530,7 @@ class CVConvTranpose1d(_CVConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConvTranpose1d, self).__init__(
+        super(ConvTranpose1d, self).__init__(
             ConvClass=nn.ConvTranspose1d,
             ConvFunc=F.conv_transpose1d,
             in_channels=in_channels,
@@ -548,7 +548,7 @@ class CVConvTranpose1d(_CVConvTranspose):
         )
 
 
-class CVConvTranpose2d(_CVConvTranspose):
+class ConvTranpose2d(_ConvTranspose):
     r"""
     2-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -596,7 +596,7 @@ class CVConvTranpose2d(_CVConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConvTranpose2d, self).__init__(
+        super(ConvTranpose2d, self).__init__(
             ConvClass=nn.ConvTranspose2d,
             ConvFunc=F.conv_transpose2d,
             in_channels=in_channels,
@@ -614,7 +614,7 @@ class CVConvTranpose2d(_CVConvTranspose):
         )
 
 
-class CVConvTranpose3d(_CVConvTranspose):
+class ConvTranpose3d(_ConvTranspose):
     r"""
     3-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -662,7 +662,7 @@ class CVConvTranpose3d(_CVConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(CVConvTranpose3d, self).__init__(
+        super(ConvTranpose3d, self).__init__(
             ConvClass=nn.ConvTranspose3d,
             ConvFunc=F.conv_transpose3d,
             in_channels=in_channels,

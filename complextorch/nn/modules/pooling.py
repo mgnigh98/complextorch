@@ -6,10 +6,10 @@ import torch
 #from ... import CVTensor
 from .. import functional as cvF
 
-__all__ = ["CVAdaptiveAvgPool1d", "CVAdaptiveAvgPool2d", "CVAdaptiveAvgPool3d"]
+__all__ = ["AdaptiveAvgPool1d", "AdaptiveAvgPool2d", "AdaptiveAvgPool3d"]
 
 
-class CVAdaptiveAvgPool1d(nn.AdaptiveAvgPool1d):
+class AdaptiveAvgPool1d(nn.AdaptiveAvgPool1d):
     r"""
     1-D Complex-Valued Adaptive Average Pooling
     -------------------------------------------
@@ -39,7 +39,7 @@ class CVAdaptiveAvgPool1d(nn.AdaptiveAvgPool1d):
         return cvF.apply_complex_split(super().forward, super().forward, input)
 
 
-class CVAdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
+class AdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
     r"""
     2-D Complex-Valued Adaptive Average Pooling
     -------------------------------------------
@@ -69,7 +69,7 @@ class CVAdaptiveAvgPool2d(nn.AdaptiveAvgPool2d):
         return cvF.apply_complex_split(super().forward, super().forward, input)
 
 
-class CVAdaptiveAvgPool3d(nn.AdaptiveAvgPool3d):
+class AdaptiveAvgPool3d(nn.AdaptiveAvgPool3d):
     r"""
     3-D Complex-Valued Adaptive Average Pooling
     -------------------------------------------

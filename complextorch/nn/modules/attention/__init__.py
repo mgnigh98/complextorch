@@ -5,10 +5,10 @@ import torch.nn as nn
 #from .... import CVTensor
 from .... import nn as cvnn
 
-__all__ = ["CVScaledDotProductAttention", "CVMultiheadAttention"]
+__all__ = ["ScaledDotProductAttention", "MultiheadAttention"]
 
 
-class CVScaledDotProductAttention(nn.Module):
+class ScaledDotProductAttention(nn.Module):
     r"""
     Complex-Valued Scaled Dot-Product Attention
     -------------------------------------------
@@ -35,10 +35,10 @@ class CVScaledDotProductAttention(nn.Module):
         attn_dropout: float = 0.1,
         SoftMaxClass: nn.Module = cvnn.CVSoftMax,
     ) -> None:
-        super(CVScaledDotProductAttention, self).__init__()
+        super(ScaledDotProductAttention, self).__init__()
 
         self.temperature = temperature
-        self.dropout = cvnn.CVDropout(attn_dropout)
+        self.dropout = cvnn.Dropout(attn_dropout)
         self.softmax = SoftMaxClass(dim=-1)
 
     def forward(self, q: torch.complex, k: torch.complex, v: torch.complex) -> torch.complex:
@@ -59,7 +59,7 @@ class CVScaledDotProductAttention(nn.Module):
         return torch.complex(output.real, output.imag)
 
 
-class CVMultiheadAttention(nn.Module):
+class MultiheadAttention(nn.Module):
     r"""
     Complex-Valued Multihead Attention
     ----------------------------------
@@ -78,23 +78,23 @@ class CVMultiheadAttention(nn.Module):
         dropout: float = 0.1,
         SoftMaxClass: nn.Module = cvnn.CVSoftMax,
     ) -> None:
-        super(CVMultiheadAttention, self).__init__()
+        super(MultiheadAttention, self).__init__()
 
         self.d_k = d_k
         self.d_v = d_v
         self.n_heads = n_heads
 
-        self.w_q = cvnn.CVLinear(d_model, n_heads * d_k, bias=False)
-        self.w_k = cvnn.CVLinear(d_model, n_heads * d_k, bias=False)
-        self.w_v = cvnn.CVLinear(d_model, n_heads * d_v, bias=False)
-        self.fc = cvnn.CVLinear(n_heads * d_v, d_model, bias=False)
+        self.w_q = cvnn.Linear(d_model, n_heads * d_k, bias=False)
+        self.w_k = cvnn.Linear(d_model, n_heads * d_k, bias=False)
+        self.w_v = cvnn.Linear(d_model, n_heads * d_v, bias=False)
+        self.fc = cvnn.Linear(n_heads * d_v, d_model, bias=False)
 
-        self.attention = CVScaledDotProductAttention(
+        self.attention = ScaledDotProductAttention(
             temperature=d_k**0.5, attn_dropout=dropout, SoftMaxClass=SoftMaxClass
         )
 
-        self.dropout = cvnn.CVDropout(dropout)
-        self.layer_norm = cvnn.CVLayerNorm(d_model, eps=1e-6)
+        self.dropout = cvnn.Dropout(dropout)
+        self.layer_norm = cvnn.LayerNorm(d_model, eps=1e-6)
 
     def forward(self, q: torch.complex, k: torch.complex, v: torch.complex) -> torch.complex:
         d_k, d_v, n_heads = self.d_k, self.d_v, self.n_heads

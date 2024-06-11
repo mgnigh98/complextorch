@@ -6,13 +6,13 @@ import torch
 from .... import nn as cvnn
 
 __all__ = [
-    "CVEfficientChannelAttention1d",
-    "CVEfficientChannelAttention2d",
-    "CVEfficientChannelAttention3d",
+    "EfficientChannelAttention1d",
+    "EfficientChannelAttention2d",
+    "EfficientChannelAttention3d",
 ]
 
 
-class _CVEfficientChannelAttention(nn.Module):
+class _EfficientChannelAttention(nn.Module):
     r"""
     Complex-Valued Efficient Channel Attention Base Class
     -----------------------------------------------------
@@ -34,13 +34,13 @@ class _CVEfficientChannelAttention(nn.Module):
         b: int = 1,
         gamma: int = 2,
     ) -> None:
-        super(_CVEfficientChannelAttention, self).__init__()
+        super(_EfficientChannelAttention, self).__init__()
         self.channels = channels
         self.b = b
         self.gamma = gamma
         self.avg_pool = AvgPoolClass(1)
         self.mask = MaskingClass()
-        self.conv = cvnn.CVConv1d(
+        self.conv = cvnn.Conv1d(
             in_channels=1,
             out_channels=1,
             kernel_size=self.kernel_size(),
@@ -70,7 +70,7 @@ class _CVEfficientChannelAttention(nn.Module):
         return input * y
 
 
-class CVEfficientChannelAttention1d(_CVEfficientChannelAttention):
+class EfficientChannelAttention1d(_EfficientChannelAttention):
     r"""
     1-D Complex-Valued Efficient Channel Attention
     ----------------------------------------------
@@ -99,16 +99,16 @@ class CVEfficientChannelAttention1d(_CVEfficientChannelAttention):
         b: int = 1,
         gamma: int = 2,
     ) -> None:
-        super(CVEfficientChannelAttention1d, self).__init__(
+        super(EfficientChannelAttention1d, self).__init__(
             channels=channels,
             MaskingClass=MaskingClass,
-            AvgPoolClass=cvnn.CVAdaptiveAvgPool1d,
+            AvgPoolClass=cvnn.AdaptiveAvgPool1d,
             b=b,
             gamma=gamma,
         )
 
 
-class CVEfficientChannelAttention2d(_CVEfficientChannelAttention):
+class EfficientChannelAttention2d(_EfficientChannelAttention):
     r"""
     2-D Complex-Valued Efficient Channel Attention
     ----------------------------------------------
@@ -137,16 +137,16 @@ class CVEfficientChannelAttention2d(_CVEfficientChannelAttention):
         b: int = 1,
         gamma: int = 2,
     ) -> None:
-        super(CVEfficientChannelAttention2d, self).__init__(
+        super(EfficientChannelAttention2d, self).__init__(
             channels=channels,
             MaskingClass=MaskingClass,
-            AvgPoolClass=cvnn.CVAdaptiveAvgPool2d,
+            AvgPoolClass=cvnn.AdaptiveAvgPool2d,
             b=b,
             gamma=gamma,
         )
 
 
-class CVEfficientChannelAttention3d(_CVEfficientChannelAttention):
+class EfficientChannelAttention3d(_EfficientChannelAttention):
     r"""
     3-D Complex-Valued Efficient Channel Attention
     ----------------------------------------------
@@ -175,10 +175,10 @@ class CVEfficientChannelAttention3d(_CVEfficientChannelAttention):
         b: int = 1,
         gamma: int = 2,
     ) -> None:
-        super(CVEfficientChannelAttention3d, self).__init__(
+        super(EfficientChannelAttention3d, self).__init__(
             channels=channels,
             MaskingClass=MaskingClass,
-            AvgPoolClass=cvnn.CVAdaptiveAvgPool3d,
+            AvgPoolClass=cvnn.AdaptiveAvgPool3d,
             b=b,
             gamma=gamma,
         )

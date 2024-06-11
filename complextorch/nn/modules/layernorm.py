@@ -7,10 +7,10 @@ from torch.nn import init
 from .. import functional as cvF
 #from ... import CVTensor
 
-__all__ = ["CVLayerNorm"]
+__all__ = ["LayerNorm"]
 
 
-class CVLayerNorm(nn.Module):
+class LayerNorm(nn.Module):
     r"""
     Complex-Valued Layer Normalization
     ----------------------------------
@@ -75,6 +75,6 @@ class CVLayerNorm(nn.Module):
         self.weight.data = self.weight.data.to(input.device)
         self.bias.data = self.bias.data.to(input.device)
 
-        return cvF.cv_layer_norm(
+        return cvF.layer_norm(
             input, self.normalized_shape, self.weight, self.bias, self.eps
         )

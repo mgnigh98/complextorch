@@ -4,10 +4,10 @@ import torch.nn as nn
 #from ... import CVTensor
 from .. import functional as cvF
 
-__all__ = ["CVDropout"]
+__all__ = ["Dropout"]
 
 
-class CVDropout(nn.Module):
+class Dropout(nn.Module):
     r"""
     Complex-Valued Dropout Layer
     ----------------------------
@@ -24,7 +24,7 @@ class CVDropout(nn.Module):
     """
 
     def __init__(self, p: float = 0.5, inplace: bool = False) -> None:
-        super(CVDropout, self).__init__()
+        super(Dropout, self).__init__()
 
         self.dropout_r = nn.Dropout(p, inplace)
         self.dropout_i = nn.Dropout(p, inplace)
