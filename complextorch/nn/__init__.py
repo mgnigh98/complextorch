@@ -18,7 +18,7 @@ from .modules.activation import (
 
 from .modules.conv import SlowConv1d
 from .modules.conv import Conv1d, Conv2d, Conv3d
-from .modules.conv import ConvTranpose1d, ConvTranpose2d, ConvTranpose3d
+from .modules.conv import ConvTranspose1d, ConvTranspose2d, ConvTranspose3d
 
 from .modules.manifold import wFMConv1d, wFMConv2d
 
