@@ -33,6 +33,7 @@ class _EfficientChannelAttention(nn.Module):
         AvgPoolClass: nn.Module,
         b: int = 1,
         gamma: int = 2,
+        dtype=torch.complex64
     ) -> None:
         super(_EfficientChannelAttention, self).__init__()
         self.channels = channels
@@ -40,12 +41,13 @@ class _EfficientChannelAttention(nn.Module):
         self.gamma = gamma
         self.avg_pool = AvgPoolClass(1)
         self.mask = MaskingClass()
-        self.conv = cvnn.Conv1d(
+        self.conv = nn.Conv1d(
             in_channels=1,
             out_channels=1,
             kernel_size=self.kernel_size(),
             padding=(self.kernel_size() - 1) // 2,
             bias=False,
+            dtype=dtype
         )
 
     def kernel_size(self) -> int:
@@ -98,6 +100,7 @@ class EfficientChannelAttention1d(_EfficientChannelAttention):
         MaskingClass: nn.Module = cvnn.ComplexRatioMask,
         b: int = 1,
         gamma: int = 2,
+        dtype=torch.complex64
     ) -> None:
         super(EfficientChannelAttention1d, self).__init__(
             channels=channels,
@@ -105,6 +108,7 @@ class EfficientChannelAttention1d(_EfficientChannelAttention):
             AvgPoolClass=cvnn.AdaptiveAvgPool1d,
             b=b,
             gamma=gamma,
+            dtype=dtype
         )
 
 
@@ -136,6 +140,7 @@ class EfficientChannelAttention2d(_EfficientChannelAttention):
         MaskingClass: nn.Module = cvnn.ComplexRatioMask,
         b: int = 1,
         gamma: int = 2,
+        dtype=torch.complex64
     ) -> None:
         super(EfficientChannelAttention2d, self).__init__(
             channels=channels,
@@ -143,6 +148,7 @@ class EfficientChannelAttention2d(_EfficientChannelAttention):
             AvgPoolClass=cvnn.AdaptiveAvgPool2d,
             b=b,
             gamma=gamma,
+            dtype=dtype
         )
 
 
@@ -174,6 +180,7 @@ class EfficientChannelAttention3d(_EfficientChannelAttention):
         MaskingClass: nn.Module = cvnn.ComplexRatioMask,
         b: int = 1,
         gamma: int = 2,
+        dtype=torch.complex64
     ) -> None:
         super(EfficientChannelAttention3d, self).__init__(
             channels=channels,
@@ -181,4 +188,5 @@ class EfficientChannelAttention3d(_EfficientChannelAttention):
             AvgPoolClass=cvnn.AdaptiveAvgPool3d,
             b=b,
             gamma=gamma,
+            dtype=dtype
         )
