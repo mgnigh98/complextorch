@@ -1,11 +1,31 @@
+import re
 import torch
 import numpy as np
 from copy import deepcopy
 
+from deprecated import deprecated
+
 __all__ = ["CVTensor"]
 
 
-class CVTensor:
+'''Patches which enable the rest of the code to function without CVTensors and instead with torch.complex'''
+@property
+def rect(self):
+    r"""Return the complex tensor in rectangular form."""
+    assert self.is_complex(), "Must call .rect on a complex tensor"
+    return (self.real, self.imag)
+
+@property
+def polar(self):
+    r"""Return the complex tensor in polar form."""
+    assert self.is_complex(), "Must call .polar on a complex tensor"
+    return (self.abs(), self.angle())
+
+torch.Tensor.rect = rect
+torch.Tensor.polar = polar
+
+
+class CVTensor():
     r"""
     Complex-Valued Tensor
     ---------------------
@@ -47,16 +67,19 @@ class CVTensor:
         r"""Reverse the complex tensor along the zero-th dimension."""
         return CVTensor(reversed(self.real), reversed(self.imag))
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def clone(self):
         r"""Clone a complex tensor."""
         return CVTensor(self.real.clone(), self.imag.clone())
 
     @property
+    @deprecated(version=1.1, reason="not needed when using torch.complex(will need to call as function instead of property)")
     def conj(self):
         r"""Conjugate of the complex tensor."""
         return CVTensor(self.real, -self.imag)
 
     @property
+    @deprecated(version=1.1, reason="not needed when using torch.complex (this returns a torch.complex)")
     def complex(self):
         r"""Return the complex tensor in complex form."""
         out = self.real + 1j * self.imag
@@ -72,18 +95,22 @@ class CVTensor:
         r"""Return the complex tensor in polar form."""
         return (self.abs(), self.angle())
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex replaced by torch.complex.conj()")
     def conjugate(self):
         r"""Conjugate of the complex tensor."""
         return self.conj
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __pos__(self):
         r"""Positive of the complex tensor."""
         return self
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __neg__(self):
         r"""Negative of the complex tensor."""
         return CVTensor(-self.real, -self.imag)
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __add__(self, other):
         r"""Addition of two complex tensors."""
         if is_complex(other):
@@ -94,6 +121,7 @@ class CVTensor:
     __radd__ = __add__
     __iadd__ = __add__
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def add_(self, other):
         r"""Addition of two complex tensors inplace."""
         if is_complex(other):
@@ -103,6 +131,7 @@ class CVTensor:
             self.real += other
         return self
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __sub__(self, other):
         r"""Subtraction of two complex tensors."""
         if is_complex(other):
@@ -110,12 +139,14 @@ class CVTensor:
         else:
             return CVTensor(self.real - other, self.imag)
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __rsub__(self, other):
         r"""Subtraction of two complex tensors."""
         return -self + other
 
     __isub__ = __sub__
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def sub_(self, other):
         r"""Subtraction of two complex tensors inplace."""
         if is_complex(other):
@@ -125,6 +156,8 @@ class CVTensor:
             self.real -= other
         return self
 
+    
+    @deprecated(version=1.1, reason="not needed when using torch.complex, which is faster")
     def __mul__(self, other):
         r"""Multiplication of two complex tensors using Gauss' multiplication trick to reduce computational load."""
         if is_complex(other):
@@ -138,6 +171,7 @@ class CVTensor:
     __rmul__ = __mul__
     __imul__ = __mul__
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def mul_(self, other):
         r"""Multiplication of two complex tensors inplace."""
         if is_complex(other):
@@ -151,6 +185,7 @@ class CVTensor:
             self.imag *= other
         return self
 
+    @deprecated(version=1.1, reason="not needed when using torch.complex")
     def __truediv__(self, other):
         r"""Elementwise division of two complex tensors."""
         if is_complex(other):
@@ -453,4 +488,4 @@ def from_polar(r: torch.Tensor, phi: torch.Tensor) -> CVTensor:
 
         G(r, \phi) = r * \exp(j * \phi)
     """
-    return CVTensor(r * torch.cos(phi), r * torch.sin(phi))
+    return torch.complex(r * torch.cos(phi), r * torch.sin(phi))
