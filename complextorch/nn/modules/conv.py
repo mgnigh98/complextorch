@@ -12,9 +12,9 @@ __all__ = [
     "Conv1d",
     "Conv2d",
     "Conv3d",
-    "ConvTranpose1d",
-    "ConvTranpose2d",
-    "ConvTranpose3d",
+    "ConvTranspose1d",
+    "ConvTranspose2d",
+    "ConvTranspose3d",
 ]
 
 
@@ -150,10 +150,12 @@ class _Conv(nn.Module):
 
     @property
     def weight(self) -> torch.complex:
+        # print(self.conv_i.weight.type(), "weight type")
         return torch.complex(self.conv_r.weight, self.conv_i.weight)
 
     @property
     def bias(self) -> torch.complex:
+        print(self.conv_i.bias.type(), "bias type")
         return torch.complex(self.conv_r.bias, self.conv_i.bias)
 
     def forward(self, input: torch.complex) -> torch.complex:
@@ -173,6 +175,7 @@ class _Conv(nn.Module):
             padding=self.padding,
             groups=self.groups,
         )
+        print("Conv memory allocated", torch.cuda.memory_allocated('cuda:0')/(1024**3))
         return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
@@ -482,7 +485,7 @@ class _ConvTranspose(nn.Module):
         return torch.complex(t1 - t2, t3 - t2 - t1)
 
 
-class ConvTranpose1d(_ConvTranspose):
+class ConvTranspose1d(_ConvTranspose):
     r"""
     1-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -530,7 +533,7 @@ class ConvTranpose1d(_ConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(ConvTranpose1d, self).__init__(
+        super(ConvTranspose1d, self).__init__(
             ConvClass=nn.ConvTranspose1d,
             ConvFunc=F.conv_transpose1d,
             in_channels=in_channels,
@@ -548,7 +551,7 @@ class ConvTranpose1d(_ConvTranspose):
         )
 
 
-class ConvTranpose2d(_ConvTranspose):
+class ConvTranspose2d(_ConvTranspose):
     r"""
     2-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -596,7 +599,7 @@ class ConvTranpose2d(_ConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(ConvTranpose2d, self).__init__(
+        super(ConvTranspose2d, self).__init__(
             ConvClass=nn.ConvTranspose2d,
             ConvFunc=F.conv_transpose2d,
             in_channels=in_channels,
@@ -614,7 +617,7 @@ class ConvTranpose2d(_ConvTranspose):
         )
 
 
-class ConvTranpose3d(_ConvTranspose):
+class ConvTranspose3d(_ConvTranspose):
     r"""
     3-D Complex-Valued Transposed Convolution
     -----------------------------------------
@@ -662,7 +665,7 @@ class ConvTranpose3d(_ConvTranspose):
         device=None,
         dtype=None,
     ) -> None:
-        super(ConvTranpose3d, self).__init__(
+        super(ConvTranspose3d, self).__init__(
             ConvClass=nn.ConvTranspose3d,
             ConvFunc=F.conv_transpose3d,
             in_channels=in_channels,
