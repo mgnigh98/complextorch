@@ -397,7 +397,7 @@ def _whiten2x2_layer_norm(
     axes = [-(i + 1) for i in range(len(normalized_shape))]
 
     # Compute the batch mean [2, B, 1, ...] and center the batch
-    mean = x.clone().mean(dim=axes, keepdim=True)
+    mean = x.mean(dim=axes, keepdim=True)
     x -= mean
 
     # head shape for broadcasting
